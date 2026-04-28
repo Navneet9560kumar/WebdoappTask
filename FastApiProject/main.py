@@ -15,7 +15,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI(title="FastAPI MySQL CRUD", version="1.0.0")
 
 
-# ─── CREATE ────────────────────────────────────────────────────────────────────
+#  CREATE 
 @app.post("/users/", response_model=schemas.UserResponse, status_code=201)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     existing = crud.get_user_by_email(db, email=user.email)
@@ -24,13 +24,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-# ─── READ ALL ──────────────────────────────────────────────────────────────────
+#  READ ALL 
 @app.get("/users/", response_model=List[schemas.UserResponse])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud.get_users(db, skip=skip, limit=limit)
 
 
-# ─── READ ONE ──────────────────────────────────────────────────────────────────
+# READ ONE 
 @app.get("/users/{user_id}", response_model=schemas.UserResponse)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
@@ -39,7 +39,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-# ─── UPDATE ────────────────────────────────────────────────────────────────────
+# UPDATE ──
 @app.put("/users/{user_id}", response_model=schemas.UserResponse)
 def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
     db_user = crud.update_user(db, user_id=user_id, user=user)
@@ -48,7 +48,7 @@ def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(ge
     return db_user
 
 
-# ─── DELETE ────────────────────────────────────────────────────────────────────
+# DELETE ──
 @app.delete("/users/{user_id}", response_model=schemas.UserResponse)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     db_user = crud.delete_user(db, user_id=user_id)
@@ -57,7 +57,7 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-# ─── HEALTH CHECK ──────────────────────────────────────────────────────────────
+# HEALTH CHECK
 @app.get("/")
 def root():
     return {"message": "API chal rahi hai bhai!"}
